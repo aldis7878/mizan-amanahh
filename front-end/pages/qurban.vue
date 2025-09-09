@@ -1,13 +1,44 @@
 <template>
   <div class="flex flex-col min-h-screen text-gray-800 bg-gray-50">
     <!-- Navbar -->
-    <header class="sticky top-0 z-50 bg-white shadow-md">
-      <nav class="relative flex items-center justify-between px-4 py-4 mx-auto max-w-7xl sm:px-6">
-        <div class="flex items-center space-x-3">
-          <!-- Tombol Back -->
-          <button @click="goBack" class="inline-flex items-center space-x-2 text-gray-700 hover:text-blue-600">
-            <i class="text-xl fas fa-arrow-left"></i>
-            <span>Kembali</span>
+    <header class="sticky top-0 z-50 bg-[#E9741C] shadow-md">
+    <div class="px-6 py-6 mx-auto max-w-7xl text-white">
+      <!-- Baris Atas: Back + Judul -->
+      <div class="flex items-center mb-1">
+        <!-- Tombol Back -->
+        <router-link to="/" class="mr-2 flex items-center">
+          <i class="fas fa-arrow-left text-xl"></i>
+        </router-link>
+        <!-- Judul -->
+        <h1 class="text-2xl font-bold">Program</h1>
+      </div>
+
+      <!-- Breadcrumb -->
+      <nav class="text-sm opacity-90">
+        <router-link to="/" class="hover:underline">Home</router-link>
+        <span class="mx-1">/</span>
+        <span>Tentang</span>
+      </nav>
+    </div>
+  </header>
+
+
+    <!-- Hero Section -->
+    <section class="bg-[#E9741C] py-16">
+      <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-center text-white">
+        <!-- Teks -->
+        <div>
+          <h2 class="text-4xl font-extrabold mb-4">Tunaikan Ibadah Qurban<br />dengan Amanah</h2>
+          <p class="mb-6">Mudahkan qurbanmu bersama kami, distribusi merata untuk yang berhak, sesuai syariat, transparan, dan amanah.</p>
+          <!-- Countdown -->
+          <div class="mb-4">
+            <span class="px-3 py-2 rounded bg-white text-black font-semibold">
+              Batas Qurban: -92h -16j -46m -15d
+            </span>
+          </div>
+          <!-- Button -->
+          <button class="bg-sky-500 hover:bg-sky-600 text-white px-5 py-2 rounded shadow-md">
+            Daftar Sekarang
           </button>
         </div>
 
@@ -55,26 +86,8 @@
         <div class="inline-block p-3 font-bold text-black bg-white rounded-lg shadow-md">
           Batas Qurban: {{ countdown.days }}h {{ countdown.hours }}j {{ countdown.minutes }}m {{ countdown.seconds }}d
         </div>
-        <!-- Button Daftar Sekarang -->
-        <button
-          @click="scrollTo('daftar')"
-          class="block bg-yellow-400 hover:bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg !bg-[#5DAAB9] hover:!bg-[#4c94a1]"
-        >
-          Daftar Sekarang
-        </button>
       </div>
-    </div>
-    <div class="flex justify-center">
-      <!-- 🔥 Ganti icon sapi dengan gambar -->
-      <img 
-        src="/assets/image/sedekah1.png" 
-        alt="Qurban" 
-        class="object-cover rounded-lg shadow-lg w-72 h-44 lg:w-96 lg:h-60" 
-      />
-
-    </div>
-  </div>
-</section>
+    </section>
 
 
     <!-- Tentang Qurban -->
@@ -169,7 +182,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-[#FB8603] text-white py-8 mt-auto">
+    <footer class="bg-[#E9741C] text-white py-8 mt-auto">
       <div class="px-4 mx-auto space-y-2 text-center max-w-7xl">
         <p>&copy; {{ currentYear }} Qurban Amanah. Semua Hak Dilindungi.</p>
         <p>Hubungi kami: 0812-3456-7890 | Email: info@qurbanamanah.org</p>
@@ -178,7 +191,7 @@
 
     <!-- WhatsApp Floating Button -->
     <a
-      href="https://wa.me/6281234567890"
+      href="https://wa.me/083153611239"
       target="_blank"
       class="fixed bottom-6 right-6 bg-[#5DAAB9] text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg hover:bg-[#4c94a1]"
     >
@@ -196,8 +209,8 @@ const router = useRouter()
 const paketQurban = [
   { id: 1, name: "Kambing", price: 6000000, icon: "🐐" },
   { id: 2, name: "Domba", price: 7000000, icon: "🐏" },
-  { id: 3, name: "Sapi 1/7", price: 200000000, icon: "🐄" },
-  { id: 4, name: "Sapi 1 Ekor", price: 400000000, icon: "🐂" }
+  { id: 3, name: "Sapi 1/7", price: 20000000, icon: "🐄" },
+  { id: 4, name: "Sapi 1 Ekor", price: 40000000, icon: "🐂" }
 ]
 
 const form = reactive({
@@ -207,8 +220,22 @@ const form = reactive({
   paket: ""
 })
 
+// ✅ Kirim Form ke WhatsApp
 const submitForm = () => {
-  alert(`Pendaftaran Qurban berhasil!\n\nNama: ${form.nama}\nTelepon: ${form.telepon}\nAlamat: ${form.alamat}\nPaket: ${form.paket}`)
+  const noWaTujuan = "083153611239 " // 👉 ganti dengan nomor WA admin kamu (format internasional, tanpa +)
+  const pesan = `
+Assalamu'alaikum, saya ingin mendaftar Qurban:
+
+👤 Nama: ${form.nama}
+📞 Telepon: ${form.telepon}
+🏠 Alamat: ${form.alamat}
+🐄 Paket: ${form.paket}
+`
+
+  const url = `https://wa.me/${noWaTujuan}?text=${encodeURIComponent(pesan)}`
+  window.open(url, "_blank")
+
+  // reset form
   form.nama = ""
   form.telepon = ""
   form.alamat = ""
@@ -244,14 +271,6 @@ const toggleFAQ = (index) => {
   faqs[index].open = !faqs[index].open
 }
 
-const darkMode = ref(false)
-const logoDark = "/dark-logo.png" // ganti dengan path logo dark mode
-
-const toggleDarkMode = () => {
-  darkMode.value = !darkMode.value
-  document.documentElement.classList.toggle("dark", darkMode.value)
-}
-
 const countdown = reactive({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 const targetDate = new Date("2025-06-09T00:00:00").getTime()
 
@@ -264,7 +283,7 @@ const updateCountdown = () => {
   countdown.seconds = Math.floor((distance % (1000 * 60)) / 1000)
 }
 
-onMounted(() => {l
+onMounted(() => {
   setInterval(updateCountdown, 1000)
 })
 </script>
